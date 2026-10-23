@@ -1,0 +1,30 @@
+name: Verilog Simulation CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  simulate:
+    name: Run Verilog Testbench Verification
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog
+
+      - name: Compile Verilog with iverilog
+        run: |
+          mkdir -p sim_out
+          iverilog -o sim_out/tb_sim src/sensor_decision_unit.v tb/tb_sensor_decision_unit.v
+
+      - name: Execute Simulation
+        run: |
+          vvp sim_out/tb_sim

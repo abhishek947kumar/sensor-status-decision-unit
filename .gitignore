@@ -1,0 +1,44 @@
+# ==============================================================================
+# Xilinx Vivado .gitignore
+# ==============================================================================
+
+# Vivado generated runtime / temp directories
+.Xil/
+*.Xil/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+xsim.dir/
+vivado_project/.Xil/
+vivado_project/*.cache/
+vivado_project/*.hw/
+vivado_project/*.ip_user_files/
+vivado_project/*.runs/
+vivado_project/*.sim/
+
+# Logs, journals, str files
+*.log
+*.jou
+*.str
+*.pb
+*.wdb
+*.vcd
+*.dcp
+*.rpt.old
+webtalk*
+xelab.pb
+xvlog.pb
+xsim.jou
+xsim.log
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini

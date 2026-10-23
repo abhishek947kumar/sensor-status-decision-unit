@@ -1,0 +1,12 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Source code files
+*.v text eol=lf
+*.xdc text eol=lf
+*.tcl text eol=lf
+*.bat text eol=crlf
+*.md text eol=lf
+*.py text eol=lf
+*.gitignore text eol=lf
+*.xpr text eol=lf
