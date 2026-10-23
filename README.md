@@ -43,37 +43,37 @@ An optimized, combinational logic-based decision unit in **Verilog HDL** that cl
 
 ```mermaid
 graph LR
-    subgraph Inputs
-        SENSOR["sensor_val[7:0]<br/>(8-bit Sensor Value)"]
+    subgraph Inputs ["Input Interface"]
+        SENSOR["sensor_val[7:0]<br/>(8-bit Sensor Value: 0 - 255)"]
     end
 
-    subgraph Sensor_Status_Decision_Unit["sensor_decision_unit (Combinational Core)"]
-        COMP1["sensor_val <= 49 ?"]
-        COMP2["sensor_val <= 79 ?"]
-        COMP3["sensor_val >= 80 ?"]
+    subgraph Sensor_Status_Decision_Unit ["sensor_decision_unit (Combinational Logic Core)"]
+        COMP1["Range Decoder: 0 to 49<br/>(sensor_val <= 49)"]
+        COMP2["Range Decoder: 50 to 79<br/>(50 <= sensor_val <= 79)"]
+        COMP3["Range Decoder: 80 to 255<br/>(sensor_val >= 80)"]
     end
 
-    subgraph Outputs
-        LED_NORM["normal_led<br/>(Normal State Indicator)"]
-        LED_WARN["warning_led<br/>(Warning State Indicator)"]
-        LED_CRIT["critical_led<br/>(Critical State Indicator)"]
-        ALARM["alarm<br/>(Buzzer / Siren Output)"]
+    subgraph Outputs ["Status Indicators & Alarm"]
+        LED_NORM["normal_led<br/>(🟢 NORMAL State)"]
+        LED_WARN["warning_led<br/>(🟡 WARNING State)"]
+        LED_CRIT["critical_led<br/>(🔴 CRITICAL State)"]
+        ALARM["alarm<br/>(🚨 Critical Buzzer)"]
     end
 
     SENSOR --> COMP1
     SENSOR --> COMP2
     SENSOR --> COMP3
 
-    COMP1 -- Yes --> LED_NORM
-    COMP2 -- Yes --> LED_WARN
-    COMP3 -- Yes --> LED_CRIT
-    COMP3 -- Yes --> ALARM
+    COMP1 -- "True (0 - 49)" --> LED_NORM
+    COMP2 -- "True (50 - 79)" --> LED_WARN
+    COMP3 -- "True (80 - 255)" --> LED_CRIT
+    COMP3 -- "True (80 - 255)" --> ALARM
 
     style Sensor_Status_Decision_Unit fill:#1e1e2e,stroke:#cdd6f4,stroke-width:2px,color:#cdd6f4
-    style LED_NORM fill:#22c55e,stroke:#15803d,color:#000
-    style LED_WARN fill:#eab308,stroke:#a16207,color:#000
-    style LED_CRIT fill:#ef4444,stroke:#b91c1c,color:#fff
-    style ALARM fill:#dc2626,stroke:#991b1b,color:#fff
+    style LED_NORM fill:#166534,stroke:#22c55e,stroke-width:2px,color:#f0fdf4
+    style LED_WARN fill:#854d0e,stroke:#eab308,stroke-width:2px,color:#fefce8
+    style LED_CRIT fill:#991b1b,stroke:#ef4444,stroke-width:2px,color:#fef2f2
+    style ALARM fill:#991b1b,stroke:#ef4444,stroke-width:2px,color:#fef2f2
 ```
 
 ### Classification Flowchart
@@ -82,17 +82,20 @@ graph LR
 flowchart TD
     START([Sensor Input: sensor_val]) --> C1{"sensor_val <= 49 ?"}
     
-    C1 -- "True (0 - 49)" --> NORM["🟢 NORMAL STATUS<br/>normal_led = 1<br/>warning_led = 0<br/>critical_led = 0<br/>alarm = 0"]
+    C1 -- "YES (0 - 49)" --> NORM["🟢 NORMAL STATUS<br/>normal_led = 1<br/>warning_led = 0<br/>critical_led = 0<br/>alarm = 0"]
     
-    C1 -- False --> C2{"sensor_val <= 79 ?"}
+    C1 -- "NO (>= 50)" --> C2{"sensor_val <= 79 ?"}
     
-    C2 -- "True (50 - 79)" --> WARN["🟡 WARNING STATUS<br/>normal_led = 0<br/>warning_led = 1<br/>critical_led = 0<br/>alarm = 0"]
+    C2 -- "YES (50 - 79)" --> WARN["🟡 WARNING STATUS<br/>normal_led = 0<br/>warning_led = 1<br/>critical_led = 0<br/>alarm = 0"]
     
-    C2 -- "False (80 - 255)" --> CRIT["🔴 CRITICAL STATUS<br/>normal_led = 0<br/>warning_led = 0<br/>critical_led = 1<br/>alarm = 1"]
+    C2 -- "NO (80 - 255)" --> CRIT["🔴 CRITICAL STATUS<br/>normal_led = 0<br/>warning_led = 0<br/>critical_led = 1<br/>alarm = 1"]
 
-    style NORM fill:#14532d,stroke:#22c55e,color:#f0fdf4
-    style WARN fill:#713f12,stroke:#eab308,color:#fefce8
-    style CRIT fill:#7f1d1d,stroke:#ef4444,color:#fef2f2
+    style START fill:#334155,stroke:#94a3b8,color:#fff
+    style C1 fill:#1e293b,stroke:#38bdf8,color:#fff
+    style C2 fill:#1e293b,stroke:#38bdf8,color:#fff
+    style NORM fill:#14532d,stroke:#22c55e,stroke-width:2px,color:#f0fdf4
+    style WARN fill:#713f12,stroke:#eab308,stroke-width:2px,color:#fefce8
+    style CRIT fill:#7f1d1d,stroke:#ef4444,stroke-width:2px,color:#fef2f2
 ```
 
 ---
